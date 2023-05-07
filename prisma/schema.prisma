@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  email String @unique
+  hash String
+
+  firstName String?
+  lastName String?
+
+  contracts Contract[]
+  persons Person[]
+  skills Skill[]
+  works Work[]
+  ratings Rating[]
+
+  interactions Interaction[]
+
+  @@map("users")
+}
+
+
+model Address{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  lat Float?
+  lng Float?
+
+  name String
+
+  description String?
+
+  person Person?
+  work Work?
+
+  @@map("address")
+}
+
+model Person{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+
+  phoneNumber String?
+  avatar String?
+
+  nif String
+  birthday DateTime
+
+  userId Int 
+  user User @relation(fields: [userId], references: [id])
+
+  addressId Int @unique
+  addresses Address @relation(fields: [addressId], references: [id])
+
+  @@map("persons")
+}
+
+model SkillType{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+
+  name String
+  skills Skill[]
+
+  @@map("skillTpes")
+}
+
+model Skill{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+
+  name String
+  description String?
+
+  skillTypeId Int 
+  skillType SkillType @relation(fields: [skillTypeId], references: [id])
+
+  userId Int 
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("skills")
+}
+
+model Work{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+
+  costPerHour Decimal
+  description String?
+
+  totalHours DateTime 
+
+  userId Int 
+  user User @relation(fields: [userId], references: [id])
+
+  addressId Int @unique()
+  address Address @relation(fields: [addressId], references: [id])
+
+
+  term Term?
+
+  interactions Interaction[]
+
+  rating Rating?
+  contract Contract?
+
+  @@map("works")
+}
+
+model Term{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  hiredTerm String
+  contractorTerm String
+
+  workId Int @unique()
+  work Work @relation(fields: [workId], references: [id])
+
+  @@map("terms")
+}
+
+
+model Rating{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+
+  workId Int  @unique
+  work Work @relation(fields: [workId], references: [id])
+
+  userId Int 
+  user User @relation(fields: [userId], references: [id])
+
+
+
+  @@map("ratings")
+}
+
+enum InteractionType {
+  React
+  Comment
+}
+
+
+model Interaction{
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  type InteractionType
+
+  workId Int  
+  work Work @relation(fields: [workId], references: [id])
+
+  userId Int 
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("interactions")
+}
+
+
+
+model Contract {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  workId Int  @unique
+  work Work @relation(fields: [workId], references: [id])
+
+  hiredId Int 
+  hired User @relation(fields: [hiredId], references: [id])
+
+  @@map("contracts")
+}
+
