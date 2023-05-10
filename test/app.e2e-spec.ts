@@ -13,6 +13,7 @@ import {
   CreateAddressDto,
   EditAddressDto,
 } from 'src/address/dto';
+import { CreateSkillTypeDto, EditSkillTypeDto } from 'src/skill-type/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -253,6 +254,103 @@ describe('App e2e', () => {
           .spec()
           .get('/addresses/{id}')
           .withPathParams('id', '$S{addressId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody("")
+      });
+    });
+    
+  });
+
+  describe('SkillType', () => {
+    const dto: CreateSkillTypeDto = {
+      name: 'Developer',
+    };
+    describe('Get empity skillType', () => {
+      it('should get skillType', () => {
+        return pactum
+          .spec()
+          .get('/skill-types')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+    });
+    describe('Create skillType', () => {
+      it('should create skillType', () => {
+        return pactum
+          .spec()
+          .post('/skill-types')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .stores('skillTypeId', 'id');
+      });
+    });
+    describe('Get skillType', () => {
+      it('should get skillType', () => {
+        return pactum
+          .spec()
+          .get('/skill-types')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200);
+      });
+    });
+    describe('Get skillType by id', () => {
+      it('should get skillType', () => {
+        return pactum
+          .spec()
+          .get('/skill-types/{id}')
+          .withPathParams('id', '$S{skillTypeId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBodyContains('$S{skillTypeId}');
+      });
+    });
+    describe('Edit skillType by id', () => {
+      const dto: EditSkillTypeDto = {
+        name: 'Developer-edited',
+      };
+      it('should edit skillType by id', () => {
+        return pactum
+          .spec()
+          .patch('/skill-types/{id}')
+          .withPathParams('id', '$S{skillTypeId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.name)
+      });
+    });
+    describe('Delete skillType by id', () => {
+      it('should delete skillType by id', () => {
+        return pactum
+          .spec()
+          .delete('/skill-types/{id}')
+          .withPathParams('id', '$S{skillTypeId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(204);
+      });
+      it('should get empity skillType', () => {
+        return pactum
+          .spec()
+          .get('/skill-types/{id}')
+          .withPathParams('id', '$S{skillTypeId}')
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
