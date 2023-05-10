@@ -73,22 +73,11 @@ CREATE TABLE "works" (
     "costPerHour" DECIMAL(65,30) NOT NULL,
     "description" TEXT,
     "totalHours" TIMESTAMP(3) NOT NULL,
+    "term" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     "addressId" INTEGER NOT NULL,
 
     CONSTRAINT "works_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "terms" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "hiredTerm" TEXT NOT NULL,
-    "contractorTerm" TEXT NOT NULL,
-    "workId" INTEGER NOT NULL,
-
-    CONSTRAINT "terms_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -135,9 +124,6 @@ CREATE UNIQUE INDEX "persons_addressId_key" ON "persons"("addressId");
 CREATE UNIQUE INDEX "works_addressId_key" ON "works"("addressId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "terms_workId_key" ON "terms"("workId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "ratings_workId_key" ON "ratings"("workId");
 
 -- CreateIndex
@@ -160,9 +146,6 @@ ALTER TABLE "works" ADD CONSTRAINT "works_userId_fkey" FOREIGN KEY ("userId") RE
 
 -- AddForeignKey
 ALTER TABLE "works" ADD CONSTRAINT "works_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "terms" ADD CONSTRAINT "terms_workId_fkey" FOREIGN KEY ("workId") REFERENCES "works"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ratings" ADD CONSTRAINT "ratings_workId_fkey" FOREIGN KEY ("workId") REFERENCES "works"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

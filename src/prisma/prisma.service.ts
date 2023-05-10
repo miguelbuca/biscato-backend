@@ -19,7 +19,6 @@ export class PrismaService extends PrismaClient {
       this.interaction.deleteMany(),
       this.rating.deleteMany(),
       this.work.deleteMany(),
-      this.term.deleteMany(),
       this.skill.deleteMany(),
       this.skillType.deleteMany(),
       this.person.deleteMany(),
