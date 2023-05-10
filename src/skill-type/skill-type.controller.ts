@@ -23,17 +23,17 @@ export class SkillTypeController {
       ) {}
     
       @Get()
-      getskillTypees() {
+      getSkillTypees() {
         return this.skillTypeService.getSkillTypees();
       }
     
       @Post()
-      createskillType(@Body() dto: CreateSkillTypeDto) {
+      createSkillType(@Body() dto: CreateSkillTypeDto) {
         return this.skillTypeService.createSkillType(dto);
       }
     
       @Get(':id')
-      getskillTypeById(
+      getSkillTypeById(
         @Param('id', ParseIntPipe) skillTypeId: number,
       ) {
         return this.skillTypeService.getSkillTypeById(
@@ -42,7 +42,7 @@ export class SkillTypeController {
       }
     
       @Patch(':id')
-      editAdddressById(
+      editSkillTypeById(
         @Param('id', ParseIntPipe) skillTypeId: number,
         @Body() dto: EditSkillTypeDto,
       ) {
@@ -53,7 +53,7 @@ export class SkillTypeController {
       }
       @HttpCode(HttpStatus.NO_CONTENT)
       @Delete(':id')
-      deleteAdddressById(
+      deleteSkillTypeById(
         @Param('id', ParseIntPipe) skillTypeId: number,
       ) {
         return this.skillTypeService.deleteSkillTypeById(
