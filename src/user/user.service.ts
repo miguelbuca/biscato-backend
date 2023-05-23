@@ -26,6 +26,9 @@ export class UserService {
       where: {
         userId
       },
+      include: {
+        skillType: true
+      }
     });
     return skills;
   }
