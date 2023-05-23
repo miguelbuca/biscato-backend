@@ -1,19 +1,19 @@
 import {
-  IsString,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
+  IsString,
 } from 'class-validator';
-
-export class EditSkillTypeDto {
+export class CreateSkillDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-
+  
   @IsString()
   @IsOptional()
-  svgXml?: string
+  description?: string;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  background?: string
+  skillTypeId?: number
 }
