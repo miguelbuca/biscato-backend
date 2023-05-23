@@ -141,19 +141,6 @@ describe('App e2e', () => {
           .expectStatus(200);
       });
     });
-    describe('Get user skills', () => {
-      it('should get user skills', () => {
-        return pactum
-          .spec()
-          .get('/users/skills')
-          .withHeaders({
-            Authorization: 'Bearer $S{userAt}',
-          })
-          .stores('userId', 'id')
-          .inspect()
-          .expectStatus(200);
-      });
-    });
 
     describe('Edit user', () => {
       it('should edit user', () => {
@@ -428,6 +415,17 @@ describe('App e2e', () => {
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
+          .expectStatus(200);
+      });
+      it('should get current user skills', () => {
+        return pactum
+          .spec()
+          .get('/skills/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .stores('userId', 'id')
+          .inspect()
           .expectStatus(200);
       });
     });

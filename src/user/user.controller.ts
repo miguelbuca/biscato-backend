@@ -20,11 +20,6 @@ export class UserController {
     return user;
   }
 
-  @Get('skills')
-  getSkills(@GetUser('id') userId: number) {
-    return this.userService.getSkills(userId);
-  }
-
   @Patch()
   editUser(
     @GetUser('id') userId: number,
