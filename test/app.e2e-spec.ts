@@ -14,6 +14,7 @@ import {
   EditAddressDto,
 } from 'src/address/dto';
 import { CreateSkillTypeDto, EditSkillTypeDto } from 'src/skill-type/dto';
+import { CreateSkillDto } from 'src/skill/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -133,6 +134,7 @@ describe('App e2e', () => {
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
+          .stores('userId', 'id')
           .expectStatus(200);
       });
     });
@@ -351,6 +353,114 @@ describe('App e2e', () => {
           .spec()
           .get('/skill-types/{id}')
           .withPathParams('id', '$S{skillTypeId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody("")
+      });
+    });
+    describe('Create more one skillType', () => {
+      it('should create skillType', () => {
+        return pactum
+          .spec()
+          .post('/skill-types')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .stores('skillTypeId', 'id');
+      });
+    });
+  });
+  describe('Skill', () => {
+    describe('Get empity skill', () => {
+      it('should get skill', () => {
+        return pactum
+          .spec()
+          .get('/skills')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+    });
+    describe('Create skill', () => {
+      it('should create skill', () => {
+        return pactum
+          .spec()
+          .post('/skills')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody({
+            name: 'Test',
+            skillTypeId: "$S{skillTypeId}"
+          })
+          .inspect()
+          .expectStatus(201)
+          .stores('skillId', 'id');
+      });
+    });
+    describe('Get skill', () => {
+      it('should get skill', () => {
+        return pactum
+          .spec()
+          .get('/skills')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200);
+      });
+    });
+    describe('Get skill by id', () => {
+      it('should get skill', () => {
+        return pactum
+          .spec()
+          .get('/skills/{id}')
+          .withPathParams('id', '$S{skillId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBodyContains('$S{skillId}');
+      });
+    });
+    describe('Edit skill by id', () => {
+      const dto: EditSkillTypeDto = {
+        name: 'Developer-edited',
+      };
+      it('should edit skillType by id', () => {
+        return pactum
+          .spec()
+          .patch('/skills/{id}')
+          .withPathParams('id', '$S{skillId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.name)
+      });
+    });
+    describe('Delete skill by id', () => {
+      it('should delete skill by id', () => {
+        return pactum
+          .spec()
+          .delete('/skills/{id}')
+          .withPathParams('id', '$S{skillId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(204);
+      });
+      it('should get empity skill', () => {
+        return pactum
+          .spec()
+          .get('/skills/{id}')
+          .withPathParams('id', '$S{skillId}')
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
