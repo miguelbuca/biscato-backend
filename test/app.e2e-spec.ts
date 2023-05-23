@@ -308,6 +308,17 @@ describe('App e2e', () => {
           })
           .expectStatus(200);
       });
+      it('should get current user skills', () => {
+        return pactum
+          .spec()
+          .get('/skill-types/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .stores('userId', 'id')
+          .inspect()
+          .expectStatus(200);
+      });
     });
     describe('Get skillType by id', () => {
       it('should get skillType', () => {

@@ -14,6 +14,7 @@ import {
   import { JwtGuard } from 'src/auth/guard';
 import { SkillTypeService } from './skill-type.service';
 import { CreateSkillTypeDto, EditSkillTypeDto } from './dto';
+import { GetUser } from 'src/auth/decorator';
 
 @UseGuards(JwtGuard)
 @Controller('skill-types')
@@ -25,6 +26,12 @@ export class SkillTypeController {
       @Get()
       getSkillTypees() {
         return this.skillTypeService.getSkillTypees();
+      }
+
+      
+      @Get('me')
+      getUserSkills(@GetUser("id") userId: number) {
+        return this.skillTypeService.getUserSkillTypes(userId);
       }
     
       @Post()
