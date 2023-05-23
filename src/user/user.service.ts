@@ -19,4 +19,14 @@ export class UserService {
     });
     return user;
   }
+  async getSkills(
+    userId: number
+  ) {
+    const skills = await this.prisma.skill.findMany({
+      where: {
+        userId
+      },
+    });
+    return skills;
+  }
 }

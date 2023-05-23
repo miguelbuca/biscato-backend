@@ -13,7 +13,10 @@ import {
   CreateAddressDto,
   EditAddressDto,
 } from 'src/address/dto';
-import { CreateSkillTypeDto, EditSkillTypeDto } from 'src/skill-type/dto';
+import {
+  CreateSkillTypeDto,
+  EditSkillTypeDto,
+} from 'src/skill-type/dto';
 import { CreateSkillDto } from 'src/skill/dto';
 
 describe('App e2e', () => {
@@ -138,6 +141,20 @@ describe('App e2e', () => {
           .expectStatus(200);
       });
     });
+    describe('Get user skills', () => {
+      it('should get user skills', () => {
+        return pactum
+          .spec()
+          .get('/users/skills')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .stores('userId', 'id')
+          .inspect()
+          .expectStatus(200);
+      });
+    });
+
     describe('Edit user', () => {
       it('should edit user', () => {
         const dto: EditUserDto = {
@@ -260,10 +277,9 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}',
           })
           .expectStatus(200)
-          .expectBody("")
+          .expectBody('');
       });
     });
-    
   });
 
   describe('SkillType', () => {
@@ -333,7 +349,7 @@ describe('App e2e', () => {
           })
           .withBody(dto)
           .expectStatus(200)
-          .expectBodyContains(dto.name)
+          .expectBodyContains(dto.name);
       });
     });
     describe('Delete skillType by id', () => {
@@ -357,7 +373,7 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}',
           })
           .expectStatus(200)
-          .expectBody("")
+          .expectBody('');
       });
     });
     describe('Create more one skillType', () => {
@@ -397,7 +413,7 @@ describe('App e2e', () => {
           })
           .withBody({
             name: 'Test',
-            skillTypeId: "$S{skillTypeId}"
+            skillTypeId: '$S{skillTypeId}',
           })
           .inspect()
           .expectStatus(201)
@@ -442,7 +458,7 @@ describe('App e2e', () => {
           })
           .withBody(dto)
           .expectStatus(200)
-          .expectBodyContains(dto.name)
+          .expectBodyContains(dto.name);
       });
     });
     describe('Delete skill by id', () => {
@@ -465,9 +481,8 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}',
           })
           .expectStatus(200)
-          .expectBody("")
+          .expectBody('');
       });
     });
-    
   });
 });
