@@ -316,7 +316,6 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}',
           })
           .stores('userId', 'id')
-          .inspect()
           .expectStatus(200);
       });
     });
@@ -413,7 +412,6 @@ describe('App e2e', () => {
             name: 'Test',
             skillTypeId: '$S{skillTypeId}',
           })
-          .inspect()
           .expectStatus(201)
           .stores('skillId', 'id');
       });
@@ -436,7 +434,6 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}',
           })
           .stores('userId', 'id')
-          .inspect()
           .expectStatus(200);
       });
     });
