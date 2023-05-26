@@ -10,33 +10,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+enum WorkType {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+enum InteractionType {
+  React
+  Comment
+}
+
+enum StatusType {
+  ACTIVE
+  INACTIVE
+  AWAY
+  AVAILABLE
+  BUSY
+  OFFLINE
+  ONLINE
+  ON_HOLD
+  IN_PROGRESS
+  COMPLETED
+  PENDING
+  PAUSED
+  UNDECIDED
+  IN_PROCESS
+  UNDER_REVIEW
+  CANCELED
+  BLOCKED
+  RELEASED
+  UNDER_MAINTENANCE
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   email String @unique
-  hash String
+  hash  String
 
   firstName String?
-  lastName String?
+  lastName  String?
 
   contracts Contract[]
-  persons Person[]
-  skills Skill[]
-  works Work[]
-  ratings Rating[]
+  persons   Person[]
+  skills    Skill[]
+  works     Work[]
+  ratings   Rating[]
 
   interactions Interaction[]
 
   @@map("users")
 }
 
-
-model Address{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model Address {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   lat Float?
   lng Float?
@@ -46,144 +82,138 @@ model Address{
   description String?
 
   person Person?
-  work Work?
+  work   Work?
 
   @@map("address")
 }
 
-model Person{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
+model Person {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   phoneNumber String?
-  avatar String?
+  avatar      String?
 
-  nif String
+  nif      String
   birthday DateTime
 
-  userId Int 
-  user User @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  addressId Int @unique
+  addressId Int     @unique
   addresses Address @relation(fields: [addressId], references: [id])
 
   @@map("persons")
 }
 
-model SkillType{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model SkillType {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   svgXml String?
 
   background String?
 
-  name String
+  name   String
   skills Skill[]
 
   @@map("skillTpes")
 }
 
-model Skill{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model Skill {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
-
-  name String
+  name        String
   description String?
 
-  skillTypeId Int? 
-  skillType SkillType? @relation(fields: [skillTypeId], references: [id])
+  skillTypeId Int?
+  skillType   SkillType? @relation(fields: [skillTypeId], references: [id])
 
-  userId Int 
-  user User @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("skills")
 }
 
-model Work{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
+model Work {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   costPerHour Decimal
   description String?
 
-  totalHours DateTime 
+  totalTime Int
+
+  time WorkType
 
   term String
 
-  userId Int 
-  user User @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  addressId Int @unique()
-  address Address @relation(fields: [addressId], references: [id])
-
+  addressId Int?     @unique()
+  address   Address? @relation(fields: [addressId], references: [id])
 
   interactions Interaction[]
 
-  rating Rating?
+  rating   Rating?
   contract Contract?
 
   @@map("works")
 }
 
-model Rating{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
+model Rating {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   workId Int  @unique
-  work Work @relation(fields: [workId], references: [id])
+  work   Work @relation(fields: [workId], references: [id])
 
-  userId Int 
-  user User @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("ratings")
 }
 
-enum InteractionType {
-  React
-  Comment
-}
-
-
-model Interaction{
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model Interaction {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   type InteractionType
 
-  workId Int  
-  work Work @relation(fields: [workId], references: [id])
+  workId Int
+  work   Work @relation(fields: [workId], references: [id])
 
-  userId Int 
-  user User @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("interactions")
 }
 
-
-
 model Contract {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
 
   workId Int  @unique
-  work Work @relation(fields: [workId], references: [id])
+  work   Work @relation(fields: [workId], references: [id])
 
-  hiredId Int 
-  hired User @relation(fields: [hiredId], references: [id])
+  hiredId Int
+  hired   User @relation(fields: [hiredId], references: [id])
 
   @@map("contracts")
 }
-

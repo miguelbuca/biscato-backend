@@ -17,7 +17,7 @@ import {
   CreateSkillTypeDto,
   EditSkillTypeDto,
 } from 'src/skill-type/dto';
-import { CreateSkillDto } from 'src/skill/dto';
+import { CreateWorkDto, EditWorkDto } from 'src/work/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -483,6 +483,122 @@ describe('App e2e', () => {
           .spec()
           .get('/skills/{id}')
           .withPathParams('id', '$S{skillId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody('');
+      });
+    });
+  });
+
+  describe('Work', () => {
+    describe('Get empity work', () => {
+      it('should get work', () => {
+        return pactum
+          .spec()
+          .get('/works')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+    });
+    describe('Create work', () => {
+      const dto: CreateWorkDto = {
+        costPerHour: 300,
+        description: 'my description',
+        term: 'some terms',
+        time: 'HOUR',
+        totalTime: 5,
+        address: {
+          name: 'location',
+          description: 'location info',
+          lat: -4.8651,
+          lng: -0.154564
+        }
+      };
+      it('should create work', () => {
+        return pactum
+          .spec()
+          .post('/works')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .inspect()
+          .expectStatus(201)
+          .stores('workId', 'id');
+      });
+    });
+    describe('Get work', () => {
+      it('should get work', () => {
+        return pactum
+          .spec()
+          .get('/works')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200);
+      });
+      it('should get current user work', () => {
+        return pactum
+          .spec()
+          .get('/works/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .stores('userId', 'id')
+          .expectStatus(200);
+      });
+    });
+    describe('Get work by id', () => {
+      it('should get work', () => {
+        return pactum
+          .spec()
+          .get('/works/{id}')
+          .withPathParams('id', '$S{workId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBodyContains('$S{workId}');
+      });
+    });
+    describe('Edit work by id', () => {
+      const dto: EditWorkDto = {
+        time: 'HOUR',
+      };
+      it('should edit work by id', () => {
+        return pactum
+          .spec()
+          .patch('/works/{id}')
+          .withPathParams('id', '$S{workId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.time);
+      });
+    });
+    describe('Delete work by id', () => {
+      it('should delete work by id', () => {
+        return pactum
+          .spec()
+          .delete('/works/{id}')
+          .withPathParams('id', '$S{workId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(204);
+      });
+      it('should get empity work', () => {
+        return pactum
+          .spec()
+          .get('/works/{id}')
+          .withPathParams('id', '$S{workId}')
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
