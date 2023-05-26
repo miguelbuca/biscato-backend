@@ -12,8 +12,13 @@ export class SkillController {
       ) {}
     
       @Get()
-      getSkilles() {
-        return this.skillService.getSkilles();
+      getSkills() {
+        return this.skillService.getSkills();
+      }
+
+      @Get('me')
+      getUserSkills(@GetUser("id") userId: number) {
+        return this.skillService.getUserSkills(userId);
       }
     
       @Post()

@@ -13,8 +13,19 @@ import {
 @Injectable()
 export class SkillService {
   constructor(private prisma: PrismaService) {}
-  getSkilles() {
+  getSkills() {
     return this.prisma.skill.findMany({
+      include: {
+        skillType: true,
+      },
+    });
+  }
+
+  getUserSkills(userId: number) {
+    return this.prisma.skill.findMany({
+      where: {
+        userId,
+      },
       include: {
         skillType: true,
       },
