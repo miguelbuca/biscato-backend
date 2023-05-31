@@ -121,6 +121,8 @@ model SkillType {
   name   String
   skills Skill[]
 
+  works Work[]
+
   @@map("skillTpes")
 }
 
@@ -164,6 +166,9 @@ model Work {
   address   Address? @relation(fields: [addressId], references: [id])
 
   interactions Interaction[]
+
+  skillTypeId Int
+  skillType   SkillType @relation(fields: [skillTypeId], references: [id])
 
   rating   Rating?
   contract Contract?

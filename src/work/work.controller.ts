@@ -41,7 +41,6 @@ export class WorkController {
         @Body() dto: EditWorkDto,
       ) {
         return this.Workservice.editWorkById(
-          userId,
           WorkId,
           dto,
         );

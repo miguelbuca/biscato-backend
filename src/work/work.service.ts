@@ -35,7 +35,15 @@ export class WorkService {
   ) {
     const work = this.prisma.work.create({
       data: {
-        ...dto,
+        costPerHour: dto.costPerHour,
+        term: dto.term,
+        time: dto.time,
+        totalTime: dto.totalTime,
+        skillType:{
+          connect: {
+            id: dto.skillTypeId
+          }
+        },
         user: {
           connect: {
             id: userId,
@@ -48,6 +56,7 @@ export class WorkService {
       include: {
         address: true,
         user: true,
+        skillType: true
       },
     });
     return work;
@@ -69,7 +78,6 @@ export class WorkService {
   }
 
   async editWorkById(
-    userId: number,
     workId: number,
     dto: EditWorkDto,
   ) {

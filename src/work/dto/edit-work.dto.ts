@@ -22,6 +22,10 @@ export class EditWorkDto {
   @IsOptional()
   time?: 'HOUR'|'DAY'| 'WEEK'| 'MONTH'| 'YEAR';
 
+  @IsNumber()
+  @IsOptional()
+  skillTypeId?: number;
+
   @IsString()
   @IsOptional()
   term?: string

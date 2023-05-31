@@ -91,6 +91,7 @@ CREATE TABLE "works" (
     "term" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     "addressId" INTEGER,
+    "skillTypeId" INTEGER NOT NULL,
 
     CONSTRAINT "works_pkey" PRIMARY KEY ("id")
 );
@@ -164,6 +165,9 @@ ALTER TABLE "works" ADD CONSTRAINT "works_userId_fkey" FOREIGN KEY ("userId") RE
 
 -- AddForeignKey
 ALTER TABLE "works" ADD CONSTRAINT "works_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "works" ADD CONSTRAINT "works_skillTypeId_fkey" FOREIGN KEY ("skillTypeId") REFERENCES "skillTpes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ratings" ADD CONSTRAINT "ratings_workId_fkey" FOREIGN KEY ("workId") REFERENCES "works"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -27,6 +27,10 @@ export class CreateWorkDto {
   @IsOptional()
   term: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  skillTypeId: number;
+
   @IsOptional()
   address?: CreateAddressDto;
 }
