@@ -10,8 +10,12 @@ export class WorkService {
   constructor(private prisma: PrismaService) {}
   getWorks() {
     return this.prisma.work.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
       include: {
         address: true,
+        skillType: true,
         user: true,
       },
     });
@@ -22,8 +26,12 @@ export class WorkService {
       where: {
         userId,
       },
+      orderBy: {
+        createdAt: 'desc'
+      },
       include: {
         address: true,
+        skillType: true,
         user: true,
       },
     });
@@ -35,9 +43,11 @@ export class WorkService {
   ) {
     const work = this.prisma.work.create({
       data: {
+        title: dto.title,
         costPerHour: dto.costPerHour,
         term: dto.term,
         time: dto.time,
+        description: dto.description,
         totalTime: dto.totalTime,
         skillType:{
           connect: {
@@ -56,7 +66,8 @@ export class WorkService {
       include: {
         address: true,
         user: true,
-        skillType: true
+        skillType: true,
+        contract: true
       },
     });
     return work;
@@ -70,6 +81,7 @@ export class WorkService {
         },
         include: {
           address: true,
+          skillType: true,
           user: true,
         },
       },
@@ -88,6 +100,7 @@ export class WorkService {
       },
       include: {
         address: true,
+        skillType: true,
         user: true,
       },
     });

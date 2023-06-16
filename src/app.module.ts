@@ -7,6 +7,7 @@ import { AddressModule } from './address/address.module';
 import { SkillTypeModule } from './skill-type/skill-type.module';
 import { SkillModule } from './skill/skill.module';
 import { WorkModule } from './work/work.module';
+import { ApplicationModule } from './application/application.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { WorkModule } from './work/work.module';
     SkillTypeModule,
     SkillModule,
     WorkModule,
+    ApplicationModule,
   ],
 })
 export class AppModule {}

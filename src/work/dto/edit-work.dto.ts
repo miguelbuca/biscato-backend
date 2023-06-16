@@ -12,6 +12,10 @@ export class EditWorkDto {
 
   @IsString()
   @IsOptional()
+  title?: string
+
+  @IsString()
+  @IsOptional()
   description?: string
 
   @IsNumber()

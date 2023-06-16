@@ -8,29 +8,29 @@ import { CreateWorkDto, EditWorkDto } from './dto';
 @Controller('works')
 export class WorkController {
     constructor(
-        private Workservice: WorkService,
+        private workservice: WorkService,
       ) {}
     
       @Get()
       getWorks() {
-        return this.Workservice.getWorks();
+        return this.workservice.getWorks();
       }
 
       @Get('me')
       getUserWorks(@GetUser("id") userId: number) {
-        return this.Workservice.getUserWorks(userId);
+        return this.workservice.getUserWorks(userId);
       }
     
       @Post()
       createWork(@GetUser("id") userId: number,@Body() dto: CreateWorkDto) {
-        return this.Workservice.createWork(userId,dto);
+        return this.workservice.createWork(userId,dto);
       }
     
       @Get(':id')
       getWorkById(
         @Param('id', ParseIntPipe) WorkId: number,
       ) {
-        return this.Workservice.getWorkById(
+        return this.workservice.getWorkById(
           WorkId,
         );
       }
@@ -40,7 +40,7 @@ export class WorkController {
         @Param('id', ParseIntPipe) WorkId: number,
         @Body() dto: EditWorkDto,
       ) {
-        return this.Workservice.editWorkById(
+        return this.workservice.editWorkById(
           WorkId,
           dto,
         );
@@ -50,7 +50,7 @@ export class WorkController {
       deleteWorkById(
         @Param('id', ParseIntPipe) WorkId: number,
       ) {
-        return this.Workservice.deleteWorkById(
+        return this.workservice.deleteWorkById(
           WorkId,
         );
       }

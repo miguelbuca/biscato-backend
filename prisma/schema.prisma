@@ -58,6 +58,7 @@ model User {
   lastName  String?
 
   contracts Contract[]
+  applications Application[]
   persons   Person[]
   skills    Skill[]
   works     Work[]
@@ -150,6 +151,8 @@ model Work {
   updatedAt DateTime @updatedAt
   status StatusType? @default(ACTIVE)
 
+  title String
+
   costPerHour Decimal
   description String?
 
@@ -157,7 +160,7 @@ model Work {
 
   time WorkType
 
-  term String
+  term String?
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
@@ -166,6 +169,7 @@ model Work {
   address   Address? @relation(fields: [addressId], references: [id])
 
   interactions Interaction[]
+  applications Application[]
 
   skillTypeId Int
   skillType   SkillType @relation(fields: [skillTypeId], references: [id])
@@ -221,4 +225,19 @@ model Contract {
   hired   User @relation(fields: [hiredId], references: [id])
 
   @@map("contracts")
+}
+
+model Application {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status StatusType? @default(ACTIVE)
+
+  workId Int  @unique
+  work   Work @relation(fields: [workId], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("applications")
 }

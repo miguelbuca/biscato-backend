@@ -84,11 +84,12 @@ CREATE TABLE "works" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "status" "StatusType" DEFAULT 'ACTIVE',
+    "title" TEXT NOT NULL,
     "costPerHour" DECIMAL(65,30) NOT NULL,
     "description" TEXT,
     "totalTime" INTEGER NOT NULL,
     "time" "WorkType" NOT NULL,
-    "term" TEXT NOT NULL,
+    "term" TEXT,
     "userId" INTEGER NOT NULL,
     "addressId" INTEGER,
     "skillTypeId" INTEGER NOT NULL,
@@ -133,6 +134,18 @@ CREATE TABLE "contracts" (
     CONSTRAINT "contracts_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "applications" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "status" "StatusType" DEFAULT 'ACTIVE',
+    "workId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+
+    CONSTRAINT "applications_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -147,6 +160,9 @@ CREATE UNIQUE INDEX "ratings_workId_key" ON "ratings"("workId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "contracts_workId_key" ON "contracts"("workId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "applications_workId_key" ON "applications"("workId");
 
 -- AddForeignKey
 ALTER TABLE "persons" ADD CONSTRAINT "persons_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -186,3 +202,9 @@ ALTER TABLE "contracts" ADD CONSTRAINT "contracts_workId_fkey" FOREIGN KEY ("wor
 
 -- AddForeignKey
 ALTER TABLE "contracts" ADD CONSTRAINT "contracts_hiredId_fkey" FOREIGN KEY ("hiredId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "applications" ADD CONSTRAINT "applications_workId_fkey" FOREIGN KEY ("workId") REFERENCES "works"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "applications" ADD CONSTRAINT "applications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

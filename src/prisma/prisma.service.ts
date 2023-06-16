@@ -23,6 +23,7 @@ export class PrismaService extends PrismaClient {
       this.skillType.deleteMany(),
       this.person.deleteMany(),
       this.user.deleteMany(),
+      this.application.deleteMany(),
     ]);
   }
 }
