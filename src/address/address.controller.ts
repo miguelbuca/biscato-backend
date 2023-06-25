@@ -31,6 +31,17 @@ export class AddressController {
     return this.addressService.getAddresses();
   }
 
+  @Get(':lat/:lng')
+  getAddressNearby(
+    @Param('lat') lat: number | string,
+    @Param('lng') lng: number | string,
+  ) {
+    return this.addressService.getAdsressNearby(
+      parseInt(lat.toString()),
+      parseFloat(lng.toString()),
+    );
+  }
+
   @Post()
   createAddress(@Body() dto: CreateAddressDto) {
     return this.addressService.createAddress(dto);

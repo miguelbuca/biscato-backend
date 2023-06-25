@@ -1,35 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { CreateApplicationDto, EditApplicationDto } from './dto';
+import {
+  CreateApplicationDto,
+  EditApplicationDto,
+} from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ApplicationService {
-    constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
   getApplications() {
     return this.prisma.application.findMany();
   }
 
-  async createApplication(userId: number,dto: CreateApplicationDto) {
-    const Application = this.prisma.application.create({
-      data: {
-        userId,
-        ...dto
-      },
-    });
+  async createApplication(
+    userId: number,
+    dto: CreateApplicationDto,
+  ) {
+    const Application =
+      this.prisma.application.create({
+        data: {
+          userId,
+          ...dto,
+        },
+      });
     return Application;
   }
 
   getUserApplications(userId: number) {
     return this.prisma.application.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       where: {
         userId,
       },
       include: {
         user: true,
-        work: true
+        work: {
+          include: {
+            skillType: true,
+          },
+        },
       },
     });
   }
@@ -37,7 +48,7 @@ export class ApplicationService {
   getWorkApplications(workId: number) {
     return this.prisma.application.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       where: {
         workId,
@@ -49,7 +60,9 @@ export class ApplicationService {
     });
   }
 
-  async getApplicationById(applicationId: number) {
+  async getApplicationById(
+    applicationId: number,
+  ) {
     const Application =
       await this.prisma.application.findFirst({
         where: {
@@ -57,7 +70,7 @@ export class ApplicationService {
         },
         include: {
           user: true,
-          work: true
+          work: true,
         },
       });
     return Application;
@@ -77,7 +90,9 @@ export class ApplicationService {
     return application;
   }
 
-  async deleteAdddressById(applicationId: number) {
+  async deleteAdddressById(
+    applicationId: number,
+  ) {
     await this.prisma.application.delete({
       where: {
         id: applicationId,

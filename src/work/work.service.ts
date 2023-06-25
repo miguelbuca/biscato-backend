@@ -11,7 +11,7 @@ export class WorkService {
   getWorks() {
     return this.prisma.work.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       include: {
         address: true,
@@ -27,7 +27,7 @@ export class WorkService {
         userId,
       },
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       include: {
         address: true,
@@ -49,10 +49,10 @@ export class WorkService {
         time: dto.time,
         description: dto.description,
         totalTime: dto.totalTime,
-        skillType:{
+        skillType: {
           connect: {
-            id: dto.skillTypeId
-          }
+            id: dto.skillTypeId,
+          },
         },
         user: {
           connect: {
@@ -67,7 +67,7 @@ export class WorkService {
         address: true,
         user: true,
         skillType: true,
-        contract: true
+        contract: true,
       },
     });
     return work;
