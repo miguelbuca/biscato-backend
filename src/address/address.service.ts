@@ -4,6 +4,11 @@ import {
   EditAddressDto,
 } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  convertDistance,
+  getDistance,
+  isPointWithinRadius,
+} from 'geolib';
 
 @Injectable()
 export class AddressService {
@@ -11,7 +16,6 @@ export class AddressService {
   getAddresses() {
     return this.prisma.address.findMany();
   }
-
   async getAdsressNearby(
     lat: number,
     lng: number,
@@ -37,37 +41,20 @@ export class AddressService {
         },
       });
 
-    const toRadians = (degrees) => {
-      return degrees * (Math.PI / 180);
-    };
+    return address;
 
     const result = address.filter((item) => {
-      const earthRadius = 6371; // Raio médio da Terra em metros
-      const lat1 = toRadians(lat);
-      const lon1 = toRadians(lng);
-
-      const lat2 = toRadians(item.lat);
-      const lon2 = toRadians(item.lng);
-
-      const deltaLat = toRadians(lat2 - lat1);
-      const deltaLon = toRadians(lon2 - lon1);
-      const a =
-        Math.sin(deltaLat / 2) *
-          Math.sin(deltaLat / 2) +
-        Math.cos(toRadians(lat1)) *
-          Math.cos(toRadians(lat2)) *
-          Math.sin(deltaLon / 2) *
-          Math.sin(deltaLon / 2);
-
-      const c =
-        2 *
-        Math.atan2(
-          Math.sqrt(a),
-          Math.sqrt(1 - a),
-        );
-      const distance = earthRadius * c;
-
-      return distance <= 2; //radar = 2
+      return isPointWithinRadius(
+        {
+          lat,
+          lng,
+        },
+        {
+          lat: item.lat,
+          lng: item.lng,
+        },
+        1000,
+      );
     });
 
     return result;
