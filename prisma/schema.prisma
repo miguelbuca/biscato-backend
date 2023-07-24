@@ -103,8 +103,8 @@ model Person {
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  addressId Int     @unique
-  addresses Address @relation(fields: [addressId], references: [id])
+  addressId Int?     @unique
+  addresses Address? @relation(fields: [addressId], references: [id])
 
   @@map("persons")
 }

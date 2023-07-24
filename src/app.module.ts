@@ -11,9 +11,16 @@ import { ApplicationModule } from './application/application.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatModule } from './chat/chat.module';
 import { PersonModule } from './person/person.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..'),
+      renderPath: 'uploads',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
