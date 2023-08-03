@@ -39,6 +39,7 @@ export class ApplicationService {
         work: {
           include: {
             skillType: true,
+            user: true
           },
         },
       },
