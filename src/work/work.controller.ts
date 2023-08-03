@@ -14,9 +14,11 @@ import {
 import { JwtGuard } from 'src/auth/guard';
 import { WorkService } from './work.service';
 import { GetUser } from 'src/auth/decorator';
+import { WorkType } from '@prisma/client';
 import {
   CreateWorkDto,
   EditWorkDto,
+  FilterWorkDto,
 } from './dto';
 
 @UseGuards(JwtGuard)
@@ -24,9 +26,36 @@ import {
 export class WorkController {
   constructor(private workservice: WorkService) {}
 
-  @Get()
-  getWorks() {
-    return this.workservice.getWorks();
+  @Get(
+    '/:skillType?/:type?/:minCostPerHour?/:maxCostPerHour?',
+  )
+  getWorks(
+    @Param('skillType')
+    skillType: string,
+    @Param('type')
+    type: WorkType,
+    @Param('minCostPerHour')
+    minCostPerHour: number,
+    @Param('maxCostPerHour')
+    maxCostPerHour: number,
+  ) {
+    return this.workservice.getWorks({
+      skillType,
+      type,
+      costPerHour:
+        maxCostPerHour || minCostPerHour
+          ? {
+              max: parseFloat(
+                maxCostPerHour?.toString?.() ||
+                  '0',
+              ),
+              min: parseFloat(
+                minCostPerHour?.toString?.() ||
+                  '0',
+              ),
+            }
+          : undefined,
+    });
   }
 
   @Get('me')

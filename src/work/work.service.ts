@@ -2,17 +2,48 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateWorkDto,
   EditWorkDto,
+  FilterWorkDto,
 } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class WorkService {
   constructor(private prisma: PrismaService) {}
-  getWorks() {
+  getWorks(filter?: FilterWorkDto) {
+    const where = {};
+
+    if (
+      (filter.skillType &&
+        filter.skillType !== '' &&
+        filter.skillType !== 'null' &&
+      filter.skillType !== 'undefined')
+    ) {
+      where['skillType'] = {
+        name: filter.skillType,
+      };
+    }
+
+    if (filter.type) {
+      where['time'] = filter.type.toUpperCase();
+    }
+
+    if (filter.costPerHour) {
+      where['costPerHour'] = {};
+      if (filter.costPerHour.min) {
+        where['costPerHour']['gte'] =
+          filter.costPerHour.min;
+      }
+      if (filter.costPerHour.max) {
+        where['costPerHour']['lte'] =
+          filter.costPerHour.max;
+      }
+    }
+
     return this.prisma.work.findMany({
       orderBy: {
         createdAt: 'desc',
       },
+      where,
       include: {
         address: true,
         skillType: true,
