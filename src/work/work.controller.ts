@@ -25,7 +25,11 @@ import {
 @Controller('works')
 export class WorkController {
   constructor(private workservice: WorkService) {}
-
+  @Get('me')
+  getUserWorks(@GetUser('id') userId: number) {
+    return this.workservice.getUserWorks(userId);
+  }
+  
   @Get(
     '/:skillType?/:type?/:minCostPerHour?/:maxCostPerHour?',
   )
@@ -56,11 +60,6 @@ export class WorkController {
             }
           : undefined,
     });
-  }
-
-  @Get('me')
-  getUserWorks(@GetUser('id') userId: number) {
-    return this.workservice.getUserWorks(userId);
   }
 
   @Post()

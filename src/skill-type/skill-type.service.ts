@@ -15,11 +15,11 @@ export class SkillTypeService {
   getUserSkillTypes(userId: number) {
     return this.prisma.skillType.findMany({
       where: {
-        skills:{
+        skills: {
           some: {
-            userId
-          }
-        }
+            userId,
+          },
+        },
       },
     });
   }

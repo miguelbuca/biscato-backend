@@ -23,7 +23,12 @@ export class WorkService {
       };
     }
 
-    if (filter.type) {
+    if (
+      filter.type &&
+      filter.type !== '' &&
+      filter.type !== 'null' &&
+      filter.type !== 'undefined'
+    ) {
       where['time'] = filter.type.toUpperCase();
     }
 
