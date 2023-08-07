@@ -1,7 +1,14 @@
-import { Logger, UseGuards } from '@nestjs/common';
-import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { Logger } from '@nestjs/common';
+import {
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  OnGatewayInit,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { JwtGuard, WsAuthGuard } from 'src/auth/guard';
+import { MessageChatDto } from './dto';
 
 @WebSocketGateway()
 export class ChatGateway
@@ -24,18 +31,16 @@ export class ChatGateway
   afterInit(server: Server) {
     this.logger.log('[ws]: started');
   }
-
-  //@UseGuards(WsAuthGuard)
-  @SubscribeMessage('message')
-  handleMessage(
-    client: Socket,
-    payload: string,
-  ): void {
-    console.log(client.id, payload);
-    this.server.emit(
-      'message',
+  handleMessage(payload: any) {
+    if (!payload) return;
+    
+    /*this.server.emit(
+      payload.fromAccount.toString(),
       payload,
-      client.id,
+    );*/
+    this.server.emit(
+      payload.toAccount.toString(),
+      payload,
     );
   }
 }

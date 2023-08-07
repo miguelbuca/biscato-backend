@@ -46,10 +46,10 @@ enum StatusType {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   email String @unique
   hash  String
@@ -57,23 +57,26 @@ model User {
   firstName String?
   lastName  String?
 
-  contracts Contract[]
+  contracts    Contract[]
   applications Application[]
-  persons   Person[]
-  skills    Skill[]
-  works     Work[]
-  ratings   Rating[]
+  persons      Person[]
+  skills       Skill[]
+  works        Work[]
+  ratings      Rating[]
 
   interactions Interaction[]
+
+  chatsSent Chat[] @relation("ChatSender")
+  chatsReceived Chat[] @relation("ChatReceiver")
 
   @@map("users")
 }
 
 model Address {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   lat Float?
   lng Float?
@@ -89,10 +92,10 @@ model Address {
 }
 
 model Person {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   phoneNumber String?
   avatar      String?
@@ -110,10 +113,10 @@ model Person {
 }
 
 model SkillType {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   svgXml String?
 
@@ -128,10 +131,10 @@ model SkillType {
 }
 
 model Skill {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   name        String
   description String?
@@ -146,10 +149,10 @@ model Skill {
 }
 
 model Work {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   title String
 
@@ -181,10 +184,10 @@ model Work {
 }
 
 model Rating {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   workId Int  @unique
   work   Work @relation(fields: [workId], references: [id])
@@ -196,10 +199,10 @@ model Rating {
 }
 
 model Interaction {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   type InteractionType
 
@@ -213,10 +216,10 @@ model Interaction {
 }
 
 model Contract {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   workId Int  @unique
   work   Work @relation(fields: [workId], references: [id])
@@ -228,10 +231,10 @@ model Contract {
 }
 
 model Application {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status StatusType? @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
 
   workId Int  @unique
   work   Work @relation(fields: [workId], references: [id])
@@ -240,4 +243,21 @@ model Application {
   user   User @relation(fields: [userId], references: [id])
 
   @@map("applications")
+}
+
+model Chat {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
+
+  fromAccount Int
+  sender  User @relation("ChatSender", fields: [fromAccount], references: [id])
+
+  toAccount Int
+  receiver  User @relation("ChatReceiver", fields: [toAccount], references: [id])
+
+  content String?
+
+  @@map("chats")
 }

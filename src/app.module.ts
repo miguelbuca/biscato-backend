@@ -14,9 +14,6 @@ import { PersonModule } from './person/person.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { WebsiteModule } from './website/website.module';
-import { APP_GUARD } from '@nestjs/core';
-import { WsAuthGuard } from './auth/guard';
-import { JwtStrategy } from './auth/strategy';
 
 
 @Module({
@@ -39,13 +36,6 @@ import { JwtStrategy } from './auth/strategy';
     ChatModule,
     PersonModule,
     WebsiteModule,
-  ],
-  providers: [
-    ChatGateway,
-    {
-      provide: JwtStrategy,
-      useClass: WsAuthGuard,
-    },
   ],
 })
 export class AppModule {}

@@ -46,7 +46,7 @@ CREATE TABLE "persons" (
     "nif" TEXT NOT NULL,
     "birthday" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
-    "addressId" INTEGER NOT NULL,
+    "addressId" INTEGER,
 
     CONSTRAINT "persons_pkey" PRIMARY KEY ("id")
 );
@@ -146,6 +146,19 @@ CREATE TABLE "applications" (
     CONSTRAINT "applications_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "chats" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "status" "StatusType" DEFAULT 'ACTIVE',
+    "fromAccount" INTEGER NOT NULL,
+    "toAccount" INTEGER NOT NULL,
+    "content" TEXT,
+
+    CONSTRAINT "chats_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -168,7 +181,7 @@ CREATE UNIQUE INDEX "applications_workId_key" ON "applications"("workId");
 ALTER TABLE "persons" ADD CONSTRAINT "persons_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "persons" ADD CONSTRAINT "persons_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "persons" ADD CONSTRAINT "persons_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "skills" ADD CONSTRAINT "skills_skillTypeId_fkey" FOREIGN KEY ("skillTypeId") REFERENCES "skillTpes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -208,3 +221,9 @@ ALTER TABLE "applications" ADD CONSTRAINT "applications_workId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "applications" ADD CONSTRAINT "applications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "chats" ADD CONSTRAINT "chats_fromAccount_fkey" FOREIGN KEY ("fromAccount") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "chats" ADD CONSTRAINT "chats_toAccount_fkey" FOREIGN KEY ("toAccount") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
