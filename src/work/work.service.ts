@@ -69,6 +69,8 @@ export class WorkService {
         address: true,
         skillType: true,
         user: true,
+        applications: true,
+        _count: true
       },
     });
   }

@@ -56,7 +56,11 @@ export class ApplicationService {
       },
       include: {
         user: true,
-        work: true,
+        work: {
+          include:{
+            skillType: true
+          }
+        },
       },
     });
   }

@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  ParseIntPipe,
   Patch,
   UseGuards,
 } from '@nestjs/common';
@@ -18,6 +20,13 @@ export class UserController {
   @Get('me')
   getMe(@GetUser() user: User) {
     return user;
+  }
+
+  @Get('/:id')
+  getUser(
+    @Param('id', ParseIntPipe) userId: number,
+  ) {
+    return this.userService.getUserById(userId);
   }
 
   @Patch()

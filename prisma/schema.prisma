@@ -66,7 +66,7 @@ model User {
 
   interactions Interaction[]
 
-  chatsSent Chat[] @relation("ChatSender")
+  chatsSent     Chat[] @relation("ChatSender")
   chatsReceived Chat[] @relation("ChatReceiver")
 
   @@map("users")
@@ -236,7 +236,7 @@ model Application {
   updatedAt DateTime    @updatedAt
   status    StatusType? @default(ACTIVE)
 
-  workId Int  @unique
+  workId Int
   work   Work @relation(fields: [workId], references: [id])
 
   userId Int
@@ -252,7 +252,7 @@ model Chat {
   status    StatusType? @default(ACTIVE)
 
   fromAccount Int
-  sender  User @relation("ChatSender", fields: [fromAccount], references: [id])
+  sender      User @relation("ChatSender", fields: [fromAccount], references: [id])
 
   toAccount Int
   receiver  User @relation("ChatReceiver", fields: [toAccount], references: [id])
