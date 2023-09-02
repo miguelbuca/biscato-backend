@@ -1,4 +1,9 @@
-import { Logger } from '@nestjs/common';
+import {
+  Logger,
+  UseGuards,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -6,9 +11,10 @@ import {
   OnGatewayInit,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { MessageChatDto } from './dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @WebSocketGateway()
 export class ChatGateway
@@ -22,25 +28,45 @@ export class ChatGateway
   private connectedUsers: Map<string, Socket> =
     new Map();
 
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {}
+
   handleDisconnect(client: Socket) {
     this.connectedUsers.delete(client.id);
   }
-  handleConnection(client: Socket) {
-    this.connectedUsers.set(client.id, client);
+  async handleConnection(client: Socket) {
+    const payload = await this.jwt.verify(
+      client.handshake?.auth?.token ||
+        client.handshake?.headers?.token,
+      {
+        secret: this.config.get('JWT_SECRET'),
+      },
+    );
+
+    if (!payload) {
+      client.disconnect();
+      return;
+    }
+    this.connectedUsers.set(payload.sub, client);
   }
   afterInit(server: Server) {
     this.logger.log('[ws]: started');
   }
-  handleMessage(payload: any) {
+  //@SubscribeMessage('message')
+  handleMessage(@MessageBody() payload: any) {
     if (!payload) return;
-    
-    /*this.server.emit(
-      payload.fromAccount.toString(),
-      payload,
-    );*/
-    this.server.emit(
-      payload.toAccount.toString(),
-      payload,
-    );
+
+    const [fromAccount, toAccount] = [
+      this.connectedUsers.get(
+        payload.fromAccount,
+      ),
+      this.connectedUsers.get(payload.toAccount),
+    ];
+
+    fromAccount?.emit?.('message', payload);
+    toAccount?.emit?.('message', payload);
   }
 }

@@ -1,5 +1,4 @@
 import {
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -7,10 +6,6 @@ import {
 } from 'class-validator';
 
 export class MessageChatDto {
-  @IsString()
-  @IsNotEmpty()
-  socket_id: string;
-
   @IsNumber()
   @IsNotEmpty()
   toAccount?: number;
