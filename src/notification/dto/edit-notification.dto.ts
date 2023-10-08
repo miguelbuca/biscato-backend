@@ -52,6 +52,10 @@ export class EditNotificationDto {
 
   @IsString()
   @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  @IsNotEmpty()
   content: string;
 
   @IsJSON()

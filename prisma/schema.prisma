@@ -270,6 +270,8 @@ model Notification {
   updatedAt DateTime    @updatedAt
   status    StatusType? @default(ACTIVE)
 
+  title String
+
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
