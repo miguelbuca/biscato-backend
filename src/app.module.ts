@@ -14,6 +14,7 @@ import { PersonModule } from './person/person.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { WebsiteModule } from './website/website.module';
+import { NotificationModule } from './notification/notification.module';
 
 
 @Module({
@@ -36,6 +37,7 @@ import { WebsiteModule } from './website/website.module';
     ChatModule,
     PersonModule,
     WebsiteModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}

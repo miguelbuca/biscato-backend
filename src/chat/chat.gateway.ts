@@ -38,24 +38,31 @@ export class ChatGateway
     this.connectedUsers.delete(client.id);
   }
   async handleConnection(client: Socket) {
-    const payload = await this.jwt.verify(
-      client.handshake?.auth?.token ||
-        client.handshake?.headers?.token,
-      {
-        secret: this.config.get('JWT_SECRET'),
-      },
-    );
+    try {
+      const payload = await this.jwt.verify(
+        client.handshake?.auth?.token ||
+          client.handshake?.headers?.token,
+        {
+          secret: this.config.get('JWT_SECRET'),
+        },
+      );
 
-    if (!payload) {
-      client.disconnect();
-      return;
+      if (!payload) {
+        client.disconnect();
+        return;
+      }
+      this.connectedUsers.set(
+        payload.sub,
+        client,
+      );
+    } catch (error) {
+      this.logger.log(error);
     }
-    this.connectedUsers.set(payload.sub, client);
   }
   afterInit(server: Server) {
     this.logger.log('[ws]: started');
   }
-  //@SubscribeMessage('message')
+  @SubscribeMessage('message')
   handleMessage(@MessageBody() payload: any) {
     if (!payload) return;
 
