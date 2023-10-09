@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { NotificationService } from 'src/notification/notification.service';
 import { GetUser } from 'src/auth/decorator';
@@ -16,7 +17,9 @@ import {
   CreateNotificationDto,
   EditNotificationDto,
 } from './dto';
+import { JwtGuard } from 'src/auth/guard';
 
+@UseGuards(JwtGuard)
 @Controller('notification')
 export class NotificationController {
   constructor(
@@ -29,10 +32,19 @@ export class NotificationController {
   }
 
   @Get('me')
-  getUsernotifications(
+  getUserNotifications(
     @GetUser('id') userId: number,
   ) {
     return this.notificationService.getUserNotifications(
+      userId,
+    );
+  }
+
+  @Get('me/count')
+  getUserNotificationsCount(
+    @GetUser('id') userId: number,
+  ) {
+    return this.notificationService.getUserNotificationsCount(
       userId,
     );
   }

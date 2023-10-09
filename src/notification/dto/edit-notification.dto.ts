@@ -51,12 +51,12 @@ export class EditNotificationDto {
     | 'UNDER_MAINTENANCE';
 
   @IsString()
-  @IsNotEmpty()
-  title: string;
+  @IsOptional()
+  title?: string;
 
   @IsString()
-  @IsNotEmpty()
-  content: string;
+  @IsOptional()
+  content?: string;
 
   @IsJSON()
   @IsOptional()

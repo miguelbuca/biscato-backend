@@ -45,6 +45,11 @@ enum StatusType {
   UNDER_MAINTENANCE
 }
 
+enum NotificationType {
+  SYSTEM
+  USER
+}
+
 model User {
   id        Int         @id @default(autoincrement())
   createdAt DateTime    @default(now())
@@ -276,6 +281,8 @@ model Notification {
   user   User @relation(fields: [userId], references: [id])
 
   content String
+
+  type NotificationType? @default(SYSTEM)
 
   extra Json?
 

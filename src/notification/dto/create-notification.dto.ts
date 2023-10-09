@@ -1,4 +1,5 @@
 import {
+  IsEnum,
   IsJSON,
   IsNotEmpty,
   IsOptional,
@@ -13,6 +14,10 @@ export class CreateNotificationDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsEnum(['SYSTEM', 'USER'])
+  @IsOptional()
+  type?: 'SYSTEM' | 'USER';
 
   @IsJSON()
   @IsOptional()

@@ -35,7 +35,26 @@ export class NotificationService {
         userId,
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+  }
+
+  getUserNotificationsCount(userId: number) {
+    return this.prisma.notification.count({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      where: {
+        userId,
+        status: 'ACTIVE'
       },
     });
   }
@@ -49,7 +68,14 @@ export class NotificationService {
           id: NotificationId,
         },
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              email: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
         },
       });
     return Notification;
@@ -62,7 +88,7 @@ export class NotificationService {
     const Notification =
       await this.prisma.notification.update({
         data: {
-          ...dto
+          ...dto,
         },
         where: {
           id: notificationId,
