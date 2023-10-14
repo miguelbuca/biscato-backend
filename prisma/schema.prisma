@@ -116,7 +116,63 @@ model Person {
   addressId Int?     @unique
   addresses Address? @relation(fields: [addressId], references: [id])
 
+  portfolio Portfolio?
+
+  followers Follow[] @relation("follower")
+  person Follow[] @relation("person")
+
   @@map("persons")
+}
+
+model Follow {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
+
+  followerId Int
+  follower   Person @relation("follower", fields: [followerId], references: [id])
+
+  personId Int
+  person   Person @relation("person", fields: [personId], references: [id])
+
+  @@map("followers")
+}
+
+model Portfolio {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
+
+  title String
+
+  biography String
+
+  items PortfolioItem[]
+
+  personId Int    @unique
+  person   Person @relation(fields: [personId], references: [id])
+
+  @@map("portfolios")
+}
+
+model PortfolioItem {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    StatusType? @default(ACTIVE)
+
+  title String
+
+  description String
+
+  image String
+
+  portfolioId Int
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+
+  @@map("portfolioItems")
 }
 
 model SkillType {
