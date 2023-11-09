@@ -15,6 +15,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { WebsiteModule } from './website/website.module';
 import { NotificationModule } from './notification/notification.module';
+import { FollowModule } from './follow/follow.module';
+import { PortfolioModule } from './portfolio/portfolio.module';
+import { PortfolioItemModule } from './portfolio-item/portfolio-item.module';
 
 
 @Module({
@@ -38,6 +41,9 @@ import { NotificationModule } from './notification/notification.module';
     PersonModule,
     WebsiteModule,
     NotificationModule,
+    FollowModule,
+    PortfolioModule,
+    PortfolioItemModule,
   ],
 })
 export class AppModule {}
