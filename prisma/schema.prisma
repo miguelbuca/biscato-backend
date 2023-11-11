@@ -199,7 +199,7 @@ model Skill {
   updatedAt DateTime    @updatedAt
   status    StatusType? @default(ACTIVE)
 
-  name        String
+  name        String?
   description String?
 
   skillTypeId Int?

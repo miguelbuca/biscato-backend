@@ -29,6 +29,7 @@ export class SkillService {
       include: {
         skillType: true,
       },
+      distinct: 'skillTypeId'
     });
   }
 

@@ -6,14 +6,14 @@ import {
 } from 'class-validator';
 export class CreateSkillDto {
   @IsString()
-  @IsNotEmpty()
-  name: string;
-  
+  @IsOptional()
+  name?: string;
+
   @IsString()
   @IsOptional()
   description?: string;
 
   @IsNumber()
   @IsOptional()
-  skillTypeId?: number
+  skillTypeId?: number;
 }
