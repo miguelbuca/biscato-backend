@@ -37,6 +37,8 @@ export class UserService {
             nif: true,
             phoneNumber: true,
             avatar: true,
+            portfolio: true,
+            followers: true
           },
         },
       },

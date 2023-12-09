@@ -96,7 +96,6 @@ export class PersonController {
 
   @Patch(':id')
   editpersonById(
-    @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) personId: number,
     @Body() dto: EditPersonDto,
   ) {

@@ -32,7 +32,12 @@ export class JwtStrategy extends PassportStrategy(
           id: payload.sub,
         },
         include:{
-          persons: true
+          persons: {
+            include:{
+              portfolio: true,
+              followers: true
+            }
+          }
         },
       });
 

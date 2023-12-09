@@ -11,8 +11,12 @@ import {
 @Injectable()
 export class PortfolioService {
   constructor(private prisma: PrismaService) {}
-  getPortfolios() {
-    return this.prisma.portfolio.findMany();
+  getUserPortfolio(personId: number) {
+    return this.prisma.portfolio.findUnique({
+      where: {
+        personId,
+      },
+    });
   }
 
   async createPortfolio(
