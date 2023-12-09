@@ -26,12 +26,12 @@ export class PortfolioController {
     private portfolioService: PortfolioService,
   ) {}
 
-  @Get('me')
-  getUserPortfolio(
-    @GetUser('id') userId: number,
+  @Get('person/:id')
+  getPersonPortfolio(
+    @Param('id', ParseIntPipe) personId: number,
   ) {
-    return this.portfolioService.getUserPortfolio(
-      userId,
+    return this.portfolioService.getPersonPortfolio(
+      personId,
     );
   }
 

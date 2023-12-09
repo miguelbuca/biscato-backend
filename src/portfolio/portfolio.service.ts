@@ -11,10 +11,24 @@ import {
 @Injectable()
 export class PortfolioService {
   constructor(private prisma: PrismaService) {}
-  getUserPortfolio(personId: number) {
+
+  getPersonPortfolio(personId: number) {
     return this.prisma.portfolio.findUnique({
       where: {
         personId,
+      },
+      include: {
+        _count: true,
+        items: true,
+        person: {
+          include: {
+            user: {
+              include:{
+                _count: true
+              }
+            },
+          },
+        },
       },
     });
   }
