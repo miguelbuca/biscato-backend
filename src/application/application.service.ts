@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import {
   CreateApplicationDto,
   EditApplicationDto,
@@ -16,14 +19,29 @@ export class ApplicationService {
     userId: number,
     dto: CreateApplicationDto,
   ) {
-    const Application =
-      this.prisma.application.create({
-        data: {
-          userId,
-          ...dto,
+    const application =
+      await this.prisma.application.count({
+        where: {
+          workId: dto.workId,
+          AND: {
+            userId,
+          },
         },
       });
-    return Application;
+    if (application > 0)
+      throw new ForbiddenException(
+        'The user has already applied',
+      );
+    else {
+      const Application =
+        this.prisma.application.create({
+          data: {
+            userId,
+            ...dto,
+          },
+        });
+      return Application;
+    }
   }
 
   getUserApplications(userId: number) {
@@ -39,7 +57,7 @@ export class ApplicationService {
         work: {
           include: {
             skillType: true,
-            user: true
+            user: true,
           },
         },
       },
@@ -57,13 +75,13 @@ export class ApplicationService {
       include: {
         user: {
           include: {
-            persons: true
-          }
+            persons: true,
+          },
         },
         work: {
-          include:{
-            skillType: true
-          }
+          include: {
+            skillType: true,
+          },
         },
       },
     });
